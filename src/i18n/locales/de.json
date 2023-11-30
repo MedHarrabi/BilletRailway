@@ -1,0 +1,10 @@
+{
+    "languageSupported": {
+        "en": "Englisch",
+        "fr": "Französisch",
+        "de": "Deutsch"
+    },
+    "test": {
+        "Hello": "Hallo"
+    }
+}
