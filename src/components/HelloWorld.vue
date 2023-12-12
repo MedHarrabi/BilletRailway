@@ -11,7 +11,6 @@ defineProps({
 
 <template>
   <div class="greetings">
-    <h1> {{ $t("test.Hello") }} </h1>
     <LanguageSwitcher></LanguageSwitcher>
     <h1 class="green">{{ msg }}</h1>
   </div>
