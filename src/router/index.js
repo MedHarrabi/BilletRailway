@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-
+import translation from "@/i18n/translation";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +11,13 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about/',
+      path: '/:locale?',
+      name: 'home',
+      beforeEnter: translation.routeMiddleware,
+      component: HomeView
+    },
+    {
+      path: '/about/:locale?',
       name: 'about',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

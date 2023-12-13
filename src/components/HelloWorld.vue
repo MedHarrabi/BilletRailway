@@ -1,5 +1,5 @@
 <script setup>
-
+import LanguageSwitcher from './LanguageSwitcher.vue'
 defineProps({
   msg: {
     type: String,
@@ -10,6 +10,7 @@ defineProps({
 
 <template>
   <div class="greetings">
+    <LanguageSwitcher></LanguageSwitcher>
     <h1 class="green">{{ msg }}</h1>
   </div>
 </template>

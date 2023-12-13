@@ -25,3 +25,6 @@ Pour démarrer le projet en mode développement, utilisez la commande suivante :
 ```bash
 npm run dev
 ```
+
+## Fonctionnalité i18n
+La première étape pour personnaliser votre expérience avec BilletRailway est d'ajouter la fonctionnalité i18n (internationalization) pour prendre en charge plusieurs langues.

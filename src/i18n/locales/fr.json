@@ -1,0 +1,17 @@
+{
+    "test": {
+        "Hello": "Salut"
+    },
+    "languageSupported": {
+        "en": "Anglais",
+        "fr": "Français",
+        "de": "Allemand"
+    },
+    "headerNavBar": {
+        "home": "Accueil",
+        "aboutUs": "À propos de nous",
+        "contactUs": "Contactez-nous",
+        "login": "Connexion",
+        "register": "Inscription"
+    }
+}
