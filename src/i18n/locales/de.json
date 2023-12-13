@@ -6,5 +6,12 @@
     },
     "test": {
         "Hello": "Hallo"
+    },
+    "headerNavBar": {
+        "home": "Startseite",
+        "aboutUs": "Über uns",
+        "contactUs": "Kontaktiere uns",
+        "login": "Anmelden",
+        "register": "Registrieren"
     }
 }

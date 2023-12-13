@@ -6,5 +6,12 @@
         "en": "English",
         "fr":  "French",
         "de": "German"
+    },
+    "headerNavBar": {
+        "home": "Home",
+        "aboutUs": "About Us",
+        "contactUs": "Contact Us",
+        "login": "Login",
+        "register": "register"
     }
 }

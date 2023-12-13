@@ -1,11 +1,11 @@
 <template>
   <va-dropdown class="flag-dropdown">
     <template #anchor>
-      <va-button preset="primary" class="dropdown-button">
+      <va-button color="#06BBCC" class="dropdown-button" text-color="#fff">
         <span class="flag-icon">
           <img :src="`/src/assets/flags/${locale}.png`" :alt="`Flag Icon - ${locale}`" class="flag-icon"/>
         </span>
-        <span class="language-text" style="margin-bottom: 5px;">
+        <span class="language-text">
           {{ t(`languageSupported.${locale.toLowerCase()}`) }}
         </span>
       </va-button>
@@ -78,31 +78,34 @@ export default {
   cursor: pointer;
   border-bottom: 1px solid #eee;
   transition: background-color 0.3s;
+  font-weight: 500;
 }
 
 .flag-dropdown-item:last-child {
   border-bottom: none;
 }
 
-.flag-dropdown-item:hover {
+/*.flag-dropdown-item:hover {
   background-color: #f0f0f0;
-}
+}*/
 
 .flag-icon-container {
   display: flex;
   align-items: center;
 }
+.flag-dropdown-item:hover {
+  background-color: #E6F8F9;
+}
 
 .flag-icon {
   width: 25px;
   margin-right: 8px;
+  margin-top: 2px;
 }
 
-.language-text {
-  margin-bottom: 5px;
-}
 
 .dropdown-button {
+  height: 36px;
   width: 140px;
   display: flex;
   align-items: center;
