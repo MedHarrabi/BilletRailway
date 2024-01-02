@@ -29,26 +29,39 @@
           opened-icon="person"
           :close-on-content-click="false"
           color="#06BBCC"
-            text-color="#fff"
+          text-color="#fff"
+          left-icon
+          :label="$t('headerNavBar.login') + ' / ' + $t('headerNavBar.register')"
         >
-          <VaTabs v-model="selectedTab" stateful grow style="width: 350px; height: auto" color="#06BBCC">
+          <VaTabs v-model="value2" stateful grow style="width: 300px; height: auto" color="#06BBCC">
             <template #tabs>
-              <VaTab :key="t('headerNavBar.login')" name="Login">
-                <VaIcon name="person" size="small" class="mr-2" />
+              <VaTab key="login" name="login">
+                <VaIcon name="person" size="large" class="mr-2" />
                 {{ $t('headerNavBar.login') }}
               </VaTab>
-              <VaTab :key="$t('headerNavBar.register')" :name="$t('headerNavBar.register')">
-                <VaIcon name="feed" size="small" class="mr-2" />
+              <VaTab key="register" name="register">
+                <VaIcon name="feed" size="big" class="mr-2" />
                 {{ $t('headerNavBar.register') }}
               </VaTab>
             </template>
           </VaTabs>
-          <VaCard square outlined>
+          <VaCard square outlined  class="mt-3">
+            <VaCardTitle>
+              <VaIcon
+                  :name="currentTab1.icon"
+                  size="big"
+                  class="mr-2"
+                  color="background-element"
+              />
+              {{ currentTab1.name }}
+            </VaCardTitle>
             <VaCardContent>
-              aa
+              <component :is="currentTab1.component" />
             </VaCardContent>
             </VaCard>
         </VaButtonDropdown>
+      </VaNavbarItem>
+      <VaNavbarItem>
       </VaNavbarItem>
       <VaNavbarItem>
         <LanguageSwitcher></LanguageSwitcher>
@@ -64,8 +77,31 @@
 
 <script setup>
 import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
+import Login from "@/components/Login.vue";
+import Register from "@/components/Register.vue";
 import {useI18n} from 'vue-i18n';
 const {t} = useI18n();
+import { ref, computed } from 'vue';
+console.log(" t('headerNavBar.login')", t('headerNavBar.register'))
+const TABS2 = [
+  { icon: "person", title: "login",name: t('headerNavBar.register') , content: "Feed content", component: Login },
+  { icon: "feed", title: "register",name:  t('headerNavBar.register') , content: "Profile content", component: Register },
+];
+
+const tabs2 = TABS2;
+const value2 = ref(TABS2[0].title);
+
+const currentTab1 = computed(() => {
+  const selectedTab = tabs2.find(({ title }) => title === value2.value);
+
+  // Adding the translated name property directly within the computed property
+  if (selectedTab) {
+    selectedTab.name = t(`headerNavBar.${selectedTab.title}`);
+  }
+
+  return selectedTab;
+});
+
 </script>
 
 <style scoped>

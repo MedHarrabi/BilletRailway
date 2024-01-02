@@ -13,5 +13,9 @@
         "contactUs": "Contact Us",
         "login": "Login",
         "register": "register"
+    },
+    "login": {
+        "username": "Username",
+        "password": "Password"
     }
 }
