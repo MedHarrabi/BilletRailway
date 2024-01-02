@@ -13,5 +13,9 @@
         "contactUs": "Kontaktiere uns",
         "login": "Anmelden",
         "register": "Registrieren"
+    },
+    "login": {
+        "username": "Benutzername",
+        "password": "Passwort"
     }
 }
