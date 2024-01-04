@@ -7,22 +7,22 @@
     </template>
     <template #center>
       <VaNavbarItem class="hidden sm:block mr-5">
-        <a href="/" class="navbar-item-link">
+        <a :href="`/${locale}/`" class="navbar-item-link">
           {{ $t("headerNavBar.home") }}
         </a>
       </VaNavbarItem>
       <VaNavbarItem class="hidden sm:block">
-        <a href="/about" class="navbar-item-link">
+        <a :href="`/${locale}/about`" class="navbar-item-link">
           {{ $t("headerNavBar.aboutUs") }}
         </a>
       </VaNavbarItem>
       <VaNavbarItem class="hidden sm:block ml-5">
-        <a href="/contact" class="navbar-item-link">
+        <a :href="`/${locale}/contact`" class="navbar-item-link">
           {{ $t("headerNavBar.contactUs") }}
         </a>
       </VaNavbarItem>
       <VaNavbarItem class="hidden sm:block ml-5" v-if="user_store.isLoggedIn && tokenService.getRole() === 'ADMIN'">
-        <a href="/admin" class="navbar-item-link">
+        <a :href="`/${locale}/admin`" class="navbar-item-link">
           {{ $t("headerNavBar.admin") }}
         </a>
       </VaNavbarItem>
@@ -77,10 +77,11 @@ import LanguageSwitcher from "@/components/LanguageSwitcher.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+const { t, locale } = useI18n();
 import { ref, computed } from 'vue';
 import { useUsersStore } from '../stores/auth.store';
 import tokenService from "../services/token.service";
+
 //console.log(" t('headerNavBar.login')", t('headerNavBar.register'))
 const TABS2 = [
   { icon: "person", title: "login", name: t('headerNavBar.register'), content: "Feed content", component: Login },

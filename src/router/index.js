@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+/* import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import AboutView from '../views/AboutView.vue';
 import ContactUs from '../views/ContactUs.vue';
@@ -26,45 +26,39 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/contact/:locale?',
+      path: '/:locale?/contact',
       name: 'contact us',
       beforeEnter: translation.routeMiddleware,
       component: ContactUs
     },
-    /* {
-      path: '/admin/:locale?',
-      name: 'home',
-      beforeEnter: translation.routeMiddleware,
-      component: adminHome,
-    }, */
     {
-      path: '/about/:locale?',
+      path: '/:locale?/about',
       name: 'about',
       component: AboutView
     },
-    /* {
-      path: '/admin/:locale?',
+    {
+      path: '/:locale?/admin',
       component: adminHome,
       children: [
         {
-          path: '/travels',
+          path: '/:locale?/travels',
           name: 'list travels',
           component: travels
         },
         {
-          path: '/travels/create',
+          path: '/:locale?/travels/create',
           name: 'create travel',
           component: createTravel
         },
         {
-          path: '/travels/:id',
+          path: '/:locale?/travels/:id',
           name: 'edit travel',
           component: editTravel
         },
       ]
-    }, */
+    },
     {
-      path: '/:pathMatch(.*)*',
+      path: '/:locale?/:pathMatch(.*)*',
       name: 'NotFound',
       component: notFound
     },
@@ -72,7 +66,6 @@ const router = createRouter({
 });
 
 router.beforeEach((_to, _from, next) => {
-  console.log(`${JSON.stringify(_to)}`);
   const user_store = useUsersStore()
   if (_to.fullPath.includes('admin')) {
     if (user_store.isLoggedIn && token_service.getRole() === 'ADMIN') {
@@ -82,5 +75,70 @@ router.beforeEach((_to, _from, next) => {
     }
   }
 })
+
+export default router;
+ */
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import translation from "@/i18n/translation";
+import ContactUs from '../views/ContactUs.vue';
+
+const adminHome = () => import('../views/admin/index.vue')
+const about = () => import('../views/AboutView.vue')
+const travels = () => import('../views/admin/travels/List.vue')
+const createTravel = () => import('../views/admin/travels/Create.vue')
+const editTravel = () => import('../views/admin/travels/[id].vue')
+const notFound = () => import('../views/NotFound.vue')
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: '/:locale?',
+      name: 'home',
+      beforeEnter: translation.routeMiddleware,
+      component: HomeView
+    },
+    {
+      path: '/:locale?/contact',
+      name: 'contact us',
+      beforeEnter: translation.routeMiddleware,
+      component: () => import('../views/ContactUs.vue')
+    },
+    {
+      path: '/:locale?/about',
+      name: 'about',
+      beforeEnter: translation.routeMiddleware,
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/:locale?/admin',
+      name: 'admin home',
+      component: adminHome,
+      beforeEnter: translation.routeMiddleware,
+    },
+    {
+      path: '/:locale?/admin/travel/list',
+      name: 'list travels',
+      beforeEnter: translation.routeMiddleware,
+      component: travels,
+    },
+    {
+      path: '/:locale?/admin/travel/:id',
+      beforeEnter: translation.routeMiddleware,
+      name: 'edit travel',
+      component: editTravel
+    },
+    {
+      path: '/:locale?/admin/travel/create',
+      beforeEnter: translation.routeMiddleware,
+      name: 'create travel',
+      component: createTravel
+    }
+  ]
+});
 
 export default router;
