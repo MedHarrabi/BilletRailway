@@ -1,42 +1,31 @@
-import axios from 'axios';
-
+import axios from "../services/api";
+import token_service from "../services/token.service";
 
 const API_URL = 'http://localhost:8080/api/auth/';
 
 class AuthService {
-  login(user) {
-    return axios
-        .post(API_URL + 'signin', {
-          username: user.username,
-          password: user.password
-        })
-        .then(response => {
-          console.log("ALOOO", response)
-          if (response.data.accessToken) {
-            console.log("ALOOO1")
-            localStorage.setItem('user', JSON.stringify(response.data));
-          }
+  async login(user) {
+    const response = await axios.post('api/signin', {
+      username: user.username,
+      password: user.password
+    })
 
-          return response.data;
-        });
+    return response.data
   }
-  register(user) {
-    // Create headers object
-    const headers = {};
 
-    // Check if user has an accessToken
-    if (user && user.accessToken) {
-      headers['x-access-token'] = user.accessToken;
-    }
-
-    // Make the POST request with the specified headers
-    return axios.post(`${API_URL}signup`, {
+  async register(user) {
+    const response = await axios.post('api/signup', {
       username: user.username,
       email: user.email,
       password: user.password
-    }, {
-      headers: headers
-    });
+    })
+
+    return response.data
+  }
+
+  logout() {
+    // remove token from local storage and set auth status to null
+    token_service.removeAll();
   }
 }
 
