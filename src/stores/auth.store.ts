@@ -30,7 +30,7 @@ export const useUsersStore = defineStore('users', {
                     status: { loggedIn: true }
                 })
                 tokenService.setToken(data.token);
-                tokenService.setUser(data)
+                tokenService.setUser(data.user)
             }
         },
         async login(_user) {
@@ -41,7 +41,7 @@ export const useUsersStore = defineStore('users', {
                     status: { loggedIn: true }
                 })
                 tokenService.setToken(data.token);
-                tokenService.setUser(data)
+                tokenService.setUser(data?.user)
             }
         },
         logout() {

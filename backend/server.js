@@ -3,9 +3,10 @@ const cors = require("cors");
 const compression = require('compression')
 const dotenv = require('dotenv')
 const app = express();
+const routes = require('./routes/api')
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+    origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -13,13 +14,18 @@ app.use(compression())
 // parse requests of content-type - application/json
 app.use(express.json());
 
-dotenv.config()
+dotenv.config({
+    path: `./.env`,
+})
+
+// database
+require("./models/").sequelize.sync();
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 //Routes 
-//app.use('/api', routes)
+app.use('/api', routes)
 
 app.get('/', (req, res) => {
     return res.status(200).send({
@@ -28,6 +34,6 @@ app.get('/', (req, res) => {
     })
 })
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`)
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server is running on port ${process.env.PORT || 3000}`)
 })

@@ -1,11 +1,9 @@
 import axios from "../services/api";
 import token_service from "../services/token.service";
 
-const API_URL = 'http://localhost:8080/api/auth/';
-
 class AuthService {
   async login(user) {
-    const response = await axios.post('api/signin', {
+    const response = await axios.post('/auth/signin', {
       username: user.username,
       password: user.password
     })
@@ -14,7 +12,7 @@ class AuthService {
   }
 
   async register(user) {
-    const response = await axios.post('api/signup', {
+    const response = await axios.post('auth/signup', {
       username: user.username,
       email: user.email,
       password: user.password
