@@ -82,7 +82,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import translation from "@/i18n/translation";
 import { useUsersStore } from '../stores/auth.store';
-import token_service from '../services/token.service'
+import token_service from '../services/token.service';
+//import { useI18n } from 'vue-i18n';
+
+//const { t, locale } = useI18n()
 
 const adminHome = () => import('../views/admin/index.vue')
 const about = () => import('../views/AboutView.vue')
@@ -162,10 +165,12 @@ router.beforeEach((_to, _from, next) => {
       if (token_service.getRole() === 'ADMIN') {
         next()
       } else {
-        next(`/${localStorage.getItem("user-locale") || 'en' }/`)
+        next(`/${localStorage.getItem("user-locale")}/`)
+        //next(`/${locale.value}/`)
       }
     } else {
-      next(`/${localStorage.getItem("user-locale") || 'en' }/`)
+      next(`/${localStorage.getItem("user-locale")}/`)
+      //next(`/${locale.value}/`)
     }
   } else {
     // USER ROUTES
@@ -173,7 +178,8 @@ router.beforeEach((_to, _from, next) => {
       if (token_service.getRole() === 'USER') {
         next()
       } else {
-        next(`/${localStorage.getItem("user-locale") || 'en' }/admin`)
+        //next(`/${locale.value}/admin`)
+        next(`/${localStorage.getItem("user-locale")}/admin`)
       }
     } else {
       next()

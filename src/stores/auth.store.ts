@@ -46,7 +46,6 @@ export const useUsersStore = defineStore('users', {
             }
         },
         logout() {
-            alert('are you sure to logout')
             tokenService.removeAll()
             this.$patch({
                 status: { loggedIn: false },

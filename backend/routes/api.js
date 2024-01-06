@@ -37,7 +37,7 @@ apiRouter.delete('/reservation/create', async (req, res, next) => await isAuthen
     async (req, res) => await new ReservationApiController({ req, res }).delete())
 
 // travel routes
-apiRouter.get('/travels', async (req, res, next) => await isAuthenticatedUser(req, res, next),
+apiRouter.get('/travels', /* async (req, res, next) => await isAuthenticatedUser(req, res, next), */
     async (req, res) => await new TravelApiController({ req, res }).find())
 
 apiRouter.post('/travel/create', async (req, res, next) => await isAuthenticatedUser(req, res, next),
@@ -46,7 +46,7 @@ apiRouter.post('/travel/create', async (req, res, next) => await isAuthenticated
 apiRouter.put('/travel/update', async (req, res, next) => await isAuthenticatedUser(req, res, next),
     authorizeRoles(Roles.Admin), async (req, res) => await new TravelApiController({ req, res }).update())
 
-apiRouter.delete('/travel/delete', async (req, res, next) => await isAuthenticatedUser(req, res, next),
+apiRouter.delete('/travel/delete/:id', async (req, res, next) => await isAuthenticatedUser(req, res, next),
     authorizeRoles(Roles.Admin), async (req, res) => await new TravelApiController({ req, res }).delete())
 
 module.exports = apiRouter;

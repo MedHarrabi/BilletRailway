@@ -27,10 +27,10 @@ class AuthApiController extends BaseApiController {
                     statusCode: 400
                 })
             } else if (!password || !validator.isLength(password, {
-                min: 6
+                min: 4
             })) {
                 throw new ErrorHandler({
-                    message: `Password is required with at least 6 characters.`,
+                    message: `Password is required with at least 4 characters.`,
                     statusCode: 400
                 })
             }
@@ -48,7 +48,6 @@ class AuthApiController extends BaseApiController {
                 })
             }
 
-            delete user.created_at;
             delete user.createdAt;
             delete user.updatedAt;
 
@@ -84,7 +83,7 @@ class AuthApiController extends BaseApiController {
                     statusCode: 400
                 })
             } else if (!username || !validator.isLength(username, {
-                min: 4,
+                min: 3,
                 max: 20
             })) {
                 throw new ErrorHandler({
@@ -92,15 +91,13 @@ class AuthApiController extends BaseApiController {
                     statusCode: 400
                 })
             } else if (!password || !validator.isLength(password, {
-                min: 6
+                min: 4
             })) {
                 throw new ErrorHandler({
-                    message: `Password is required with at least 6 characters.`,
+                    message: `Password is required with at least 4 characters.`,
                     statusCode: 400
                 })
-            } else if (!role) {
-                role = Roles.User
-            }
+            } 
 
             const user = await db.user.findOne({
                 where: {
@@ -118,7 +115,7 @@ class AuthApiController extends BaseApiController {
                 username: username.toLowerCase(),
                 password: password.trim(),
                 email: email.toLowerCase(),
-                role
+                role: role || Roles.User
             })
 
             if (!new_user) {
@@ -132,8 +129,7 @@ class AuthApiController extends BaseApiController {
                 user: new_user
             })
             new_user.save();
-            
-            delete new_user.created_at;
+
             delete new_user.createdAt;
             delete new_user.updatedAt;
 

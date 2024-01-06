@@ -3,10 +3,13 @@ import { useForm } from 'vuestic-ui'
 import { reactive } from "vue";
 import { useUsersStore } from "@/stores/auth.store";
 
-const { isValid, validate, reset, resetValidation } = useForm('formRef')
+const { validate, reset, resetValidation } = useForm('formRef')
+
+import { createToaster } from "@meforma/vue-toaster";
+
+const toaster = createToaster();
 
 const user_store = useUsersStore();
-const isBtnDisabled = ref(false)
 
 const form = reactive({
   username: '',
@@ -16,11 +19,22 @@ const form = reactive({
 
 const submit = async () => {
   try {
-    isBtnDisabled.value = true
+    //  isBtnDisabled.value = true
+    console.log("check")
     await user_store.register(form);
-    isBtnDisabled.value = false
+    toaster.show("Signed up and logged in successfully", {
+      type: "success",
+      position: "bottom",
+    });
+    setTimeout(() => {
+      location.reload()
+    }, 1000);
+    //  isBtnDisabled.value = false
   } catch (error) {
-    console.log(`login error ::>> ${JSON.stringify(error)}`);
+    toaster.show(`${error.response.data.error}`, {
+      type: "error",
+      position: "bottom",
+    });
   }
 
 }
@@ -34,7 +48,7 @@ const submit = async () => {
     <VaInput v-model="form.password" style="text-transform: none;" class="mt-3" type="password"
       :label="$t('login.password')" />
 
-    <VaButton class="mt-3" :disabled="!isValid" @click="validate() && submit()">
+    <VaButton class="mt-3" @click="validate() && submit()">
       Submit
     </VaButton>
   </VaForm>

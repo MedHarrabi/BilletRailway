@@ -13,11 +13,8 @@ module.exports = (sequelize, Sequelize) => {
         },
         is_accepted: {
             type: Sequelize.BOOLEAN
-        },
-        created_at: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW,
-        },
+        }
+        
     });
 
     return Reservation;

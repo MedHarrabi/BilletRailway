@@ -11,7 +11,10 @@ module.exports = (sequelize, Sequelize) => {
         arrival_date: {
             type: Sequelize.DATE
         },
-        destination: {
+        destination_city: {
+            type: Sequelize.STRING
+        },
+        origin_city: {
             type: Sequelize.STRING
         },
         price: {
@@ -19,11 +22,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         available_tickets: {
             type: Sequelize.INTEGER
-        },
-        created_at: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW,
-        },
+        }
     });
 
     return Travel;

@@ -19,10 +19,10 @@ module.exports = (sequelize, Sequelize) => {
         role: {
             type: Sequelize.STRING
         },
-        created_at: {
+        /* created_at: {
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW,
-        },
+        }, */
     });
 
     User.prototype.setPassword_hash = function (password) {

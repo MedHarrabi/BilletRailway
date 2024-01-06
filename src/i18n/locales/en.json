@@ -11,7 +11,9 @@
         "home": "Home",
         "aboutUs": "About Us",
         "contactUs": "Contact Us",
-        "admin": "Administrator",
+        "admin" : "Administrator",
+        "travels": "Travels",
+        "reservations": "Reservations",
         "login": "Login",
         "register": "register"
     },

@@ -9,24 +9,22 @@
       <div class="admin-navbar-items" v-if="user_store.isLoggedIn && tokenService.getRole() === 'ADMIN'">
         <VaNavbarItem class="hidden sm:block ml-5">
           <a :href="`/${locale}/admin`" class="navbar-item-link">
-            <!-- {{ $t("headerNavBar.admin") }} -->
-            Home
+            {{ $t("headerNavBar.home") }}
           </a>
         </VaNavbarItem>
         <VaNavbarItem class="hidden sm:block ml-5">
           <a :href="`/${locale}/admin/travels`" class="navbar-item-link">
-            <!-- {{ $t("headerNavBar.admin") }} -->
-            Travels
+            {{ $t("headerNavBar.travels") }}
           </a>
         </VaNavbarItem>
         <VaNavbarItem class="hidden sm:block ml-5">
           <a :href="`/${locale}/admin/reservations`" class="navbar-item-link">
-            <!-- {{ $t("headerNavBar.admin") }} -->
-            Reservations
+            {{ $t("headerNavBar.reservations") }}
           </a>
         </VaNavbarItem>
       </div>
-      <div class="user-navbar-items" v-else-if="user_store.isLoggedIn && tokenService.getRole() === 'USER'">
+      <!-- <div class="user-navbar-items" v-else-if="user_store.isLoggedIn && tokenService.getRole() === 'USER'"> -->
+      <div class="user-navbar-items" v-else>
         <VaNavbarItem class="hidden sm:block mr-5">
           <a :href="`/${locale}/`" class="navbar-item-link">
             {{ $t("headerNavBar.home") }}
@@ -72,15 +70,20 @@
         </VaButtonDropdown>
       </VaNavbarItem>
       <VaNavbarItem v-else>
-        <h3 class="nav-username">
-          {{ user_store.getUser?.username || user_store.getUser?.email || 'User' }}
-        </h3>
+        <div class="username-role">
+          <h3 class="nav-username">
+            {{ user.username || user.email }}
+          </h3>
+          <h6 class="role">
+            {{ user.role }}
+          </h6>
+        </div>
       </VaNavbarItem>
       <VaNavbarItem>
         <LanguageSwitcher></LanguageSwitcher>
       </VaNavbarItem>
       <VaNavbarItem v-if="user_store.isLoggedIn">
-        <VaButton color="#06BBCC" class="mt-3" text-color="#fff" @click="logout">Logout</VaButton>
+        <VaButton color="#06BBCC" class="" text-color="#fff" @click="logout">Logout</VaButton>
       </VaNavbarItem>
     </template>
   </VaNavbar>
@@ -97,8 +100,12 @@ import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n();
 import { ref, computed } from 'vue';
 import { useUsersStore } from '../stores/auth.store';
+import { storeToRefs } from 'pinia'
 import tokenService from "../services/token.service";
 import { useRouter } from "vue-router";
+import { createToaster } from "@meforma/vue-toaster";
+
+const toaster = createToaster();
 const router = useRouter()
 
 //console.log(" t('headerNavBar.login')", t('headerNavBar.register'))
@@ -122,10 +129,16 @@ const currentTab1 = computed(() => {
 });
 
 const user_store = useUsersStore()
+const { user } = storeToRefs(user_store)
 
 const logout = () => {
   user_store.logout();
-  router.push(`/`)
+  router.push(`/${locale.value}/`)
+  toaster.show("Logged Out", {
+      type: "success",
+      position: "bottom",
+    });
+  
 }
 
 </script>
@@ -159,5 +172,16 @@ const logout = () => {
 
 .navbar-item-link:hover {
   color: #06BBCC;
+}
+
+.username-role {
+  display: flex;
+  flex-direction: column;
+}
+.role {
+  
+  color:gray;
+  font-size: 12px;
+  align-self: center;
 }
 </style>
