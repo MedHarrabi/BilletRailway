@@ -48,7 +48,11 @@ class AuthApiController extends BaseApiController {
                 })
             }
 
-            const token = generateTokenForUser({ user })
+            delete user.created_at;
+            delete user.createdAt;
+            delete user.updatedAt;
+
+            const token = await generateTokenForUser({ user })
 
             return this.response.status(200).send({
                 success: true,
@@ -127,7 +131,12 @@ class AuthApiController extends BaseApiController {
             const token = await generateTokenForUser({
                 user: new_user
             })
+            new_user.save();
             
+            delete new_user.created_at;
+            delete new_user.createdAt;
+            delete new_user.updatedAt;
+
             return this.response.status(201).send({
                 success: true,
                 user: new_user,

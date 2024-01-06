@@ -81,13 +81,15 @@ export default router;
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import translation from "@/i18n/translation";
-import ContactUs from '../views/ContactUs.vue';
+import { useUsersStore } from '../stores/auth.store';
+import token_service from '../services/token.service'
 
 const adminHome = () => import('../views/admin/index.vue')
 const about = () => import('../views/AboutView.vue')
 const travels = () => import('../views/admin/travels/List.vue')
 const createTravel = () => import('../views/admin/travels/Create.vue')
 const editTravel = () => import('../views/admin/travels/[id].vue')
+const reservations = () => import('../views/admin/reservedTickets/List.vue')
 const notFound = () => import('../views/NotFound.vue')
 
 const router = createRouter({
@@ -121,7 +123,7 @@ const router = createRouter({
       beforeEnter: translation.routeMiddleware,
     },
     {
-      path: '/:locale?/admin/travel/list',
+      path: '/:locale?/admin/travels',
       name: 'list travels',
       beforeEnter: translation.routeMiddleware,
       component: travels,
@@ -137,8 +139,46 @@ const router = createRouter({
       beforeEnter: translation.routeMiddleware,
       name: 'create travel',
       component: createTravel
-    }
+    },
+    {
+      path: '/:locale?/admin/reservations',
+      name: 'list reservations',
+      beforeEnter: translation.routeMiddleware,
+      component: reservations,
+    },
+    {
+      path: '/:locale?/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: notFound
+    },
   ]
 });
+
+router.beforeEach((_to, _from, next) => {
+  const user_store = useUsersStore()
+  if (_to.fullPath.includes('admin')) {
+    // ADMIN ROUTES
+    if (user_store.isLoggedIn) {
+      if (token_service.getRole() === 'ADMIN') {
+        next()
+      } else {
+        next(`/${localStorage.getItem("user-locale") || 'en' }/`)
+      }
+    } else {
+      next(`/${localStorage.getItem("user-locale") || 'en' }/`)
+    }
+  } else {
+    // USER ROUTES
+    if (user_store.isLoggedIn) {
+      if (token_service.getRole() === 'USER') {
+        next()
+      } else {
+        next(`/${localStorage.getItem("user-locale") || 'en' }/admin`)
+      }
+    } else {
+      next()
+    }
+  }
+})
 
 export default router;

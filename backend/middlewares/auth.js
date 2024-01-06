@@ -1,5 +1,7 @@
 const ErrorHandler = require('../utils/errors/ErrorHandler')
 const db = require('../models/')
+const authConfig = require('../config/auth.config')
+const jwt = require('jsonwebtoken')
 //const Role = require('../utils/enums/roles')
 
 const isAuthenticatedUser = async (req, res, next) => {
@@ -13,8 +15,8 @@ const isAuthenticatedUser = async (req, res, next) => {
                 statusCode: 401
             });
         }
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        const current_user = await db.user.findById(decoded.id)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || authConfig.JWT_SECRET)
+        const current_user = await db.user.findByPk(decoded.id)
 
         if (!current_user) {
             throw new ErrorHandler({
@@ -22,6 +24,10 @@ const isAuthenticatedUser = async (req, res, next) => {
                 statusCode: 500
             })
         }
+
+        delete current_user.created_at;
+        delete current_user.updatedAt;
+        
         req.user = current_user
         next()
     } catch (error) {

@@ -1,7 +1,8 @@
 import AuthService from '../services/auth.service';
 import { defineStore } from 'pinia'
 import tokenService from '../services/token.service';
-const user = JSON.parse(tokenService.getUser());
+//const user = JSON.parse(tokenService.getUser());
+const user = tokenService.getUser();
 
 const initialState = user
     ? {

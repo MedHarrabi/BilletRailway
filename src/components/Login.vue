@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { useUsersStore } from "../stores/auth.store";
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
+const router = useRouter()
 
 const user_store = useUsersStore();
 const form = reactive({
@@ -13,6 +18,7 @@ const handleSubmit = async () => {
     isBtnDisabled.value = true;
     await user_store.login(form);
     isBtnDisabled.value = false
+    router.push(`/${locale}/admin`)
   } catch (error) {
     console.log(`login error ::>> ${JSON.stringify(error)}`);
   }

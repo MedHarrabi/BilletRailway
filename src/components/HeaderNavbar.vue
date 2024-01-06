@@ -6,26 +6,43 @@
       </VaNavbarItem>
     </template>
     <template #center>
-      <VaNavbarItem class="hidden sm:block mr-5">
-        <a :href="`/${locale}/`" class="navbar-item-link">
-          {{ $t("headerNavBar.home") }}
-        </a>
-      </VaNavbarItem>
-      <VaNavbarItem class="hidden sm:block">
-        <a :href="`/${locale}/about`" class="navbar-item-link">
-          {{ $t("headerNavBar.aboutUs") }}
-        </a>
-      </VaNavbarItem>
-      <VaNavbarItem class="hidden sm:block ml-5">
-        <a :href="`/${locale}/contact`" class="navbar-item-link">
-          {{ $t("headerNavBar.contactUs") }}
-        </a>
-      </VaNavbarItem>
-      <VaNavbarItem class="hidden sm:block ml-5" v-if="user_store.isLoggedIn && tokenService.getRole() === 'ADMIN'">
-        <a :href="`/${locale}/admin`" class="navbar-item-link">
-          {{ $t("headerNavBar.admin") }}
-        </a>
-      </VaNavbarItem>
+      <div class="admin-navbar-items" v-if="user_store.isLoggedIn && tokenService.getRole() === 'ADMIN'">
+        <VaNavbarItem class="hidden sm:block ml-5">
+          <a :href="`/${locale}/admin`" class="navbar-item-link">
+            <!-- {{ $t("headerNavBar.admin") }} -->
+            Home
+          </a>
+        </VaNavbarItem>
+        <VaNavbarItem class="hidden sm:block ml-5">
+          <a :href="`/${locale}/admin/travels`" class="navbar-item-link">
+            <!-- {{ $t("headerNavBar.admin") }} -->
+            Travels
+          </a>
+        </VaNavbarItem>
+        <VaNavbarItem class="hidden sm:block ml-5">
+          <a :href="`/${locale}/admin/reservations`" class="navbar-item-link">
+            <!-- {{ $t("headerNavBar.admin") }} -->
+            Reservations
+          </a>
+        </VaNavbarItem>
+      </div>
+      <div class="user-navbar-items" v-else-if="user_store.isLoggedIn && tokenService.getRole() === 'USER'">
+        <VaNavbarItem class="hidden sm:block mr-5">
+          <a :href="`/${locale}/`" class="navbar-item-link">
+            {{ $t("headerNavBar.home") }}
+          </a>
+        </VaNavbarItem>
+        <VaNavbarItem class="hidden sm:block">
+          <a :href="`/${locale}/about`" class="navbar-item-link">
+            {{ $t("headerNavBar.aboutUs") }}
+          </a>
+        </VaNavbarItem>
+        <VaNavbarItem class="hidden sm:block ml-5">
+          <a :href="`/${locale}/contact`" class="navbar-item-link">
+            {{ $t("headerNavBar.contactUs") }}
+          </a>
+        </VaNavbarItem>
+      </div>
     </template>
     <template #right>
       <VaNavbarItem class="hidden sm:block" v-if="!user_store.isLoggedIn">
@@ -63,7 +80,7 @@
         <LanguageSwitcher></LanguageSwitcher>
       </VaNavbarItem>
       <VaNavbarItem v-if="user_store.isLoggedIn">
-        <VaButton color="#06BBCC" class="mt-3" text-color="#fff" @click="user_store.logout()">Logout</VaButton>
+        <VaButton color="#06BBCC" class="mt-3" text-color="#fff" @click="logout">Logout</VaButton>
       </VaNavbarItem>
     </template>
   </VaNavbar>
@@ -81,6 +98,8 @@ const { t, locale } = useI18n();
 import { ref, computed } from 'vue';
 import { useUsersStore } from '../stores/auth.store';
 import tokenService from "../services/token.service";
+import { useRouter } from "vue-router";
+const router = useRouter()
 
 //console.log(" t('headerNavBar.login')", t('headerNavBar.register'))
 const TABS2 = [
@@ -104,9 +123,30 @@ const currentTab1 = computed(() => {
 
 const user_store = useUsersStore()
 
+const logout = () => {
+  user_store.logout();
+  router.push(`/`)
+}
+
 </script>
 
 <style scoped>
+.admin-navbar-items {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.user-navbar-items {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
 .va-navbar__item {
   font-weight: 500;
 }
