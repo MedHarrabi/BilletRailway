@@ -32,7 +32,7 @@ apiRouter.put('/reservation/update', async (req, res, next) => await isAuthentic
     authorizeRoles(Roles.Admin),
     async (req, res) => await new ReservationApiController({ req, res }).update())
 
-apiRouter.delete('/reservation/create', async (req, res, next) => await isAuthenticatedUser(req, res, next),
+apiRouter.delete('/reservation/delete/:id', async (req, res, next) => await isAuthenticatedUser(req, res, next),
     authorizeRoles(Roles.Admin),
     async (req, res) => await new ReservationApiController({ req, res }).delete())
 
@@ -45,6 +45,9 @@ apiRouter.post('/travel/create', async (req, res, next) => await isAuthenticated
 
 apiRouter.put('/travel/update', async (req, res, next) => await isAuthenticatedUser(req, res, next),
     authorizeRoles(Roles.Admin), async (req, res) => await new TravelApiController({ req, res }).update())
+
+apiRouter.put('/travel/find/:id', async (req, res, next) => await isAuthenticatedUser(req, res, next),
+    authorizeRoles(Roles.Admin), async (req, res) => await new TravelApiController({ req, res }).findOne())
 
 apiRouter.delete('/travel/delete/:id', async (req, res, next) => await isAuthenticatedUser(req, res, next),
     authorizeRoles(Roles.Admin), async (req, res) => await new TravelApiController({ req, res }).delete())

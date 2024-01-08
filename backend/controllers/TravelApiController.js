@@ -1,4 +1,3 @@
-
 const ErrorHandler = require("../utils/errors/ErrorHandler");
 const BaseApiController = require("./BaseApiController");
 const validator = require('validator')
@@ -16,122 +15,176 @@ class TravelApiController extends BaseApiController {
             res
         });
     }
-    // DONE
+
+    async findOne() {
+            try {
+                const { id } = this.getParams()
+
+                const travel = await db.travel.findByPk(id)
+
+                if (!travel) {
+                    throw new ErrorHandler({
+                        statusCode: 404,
+                        message: 'Travel id ' + id + ' not found'
+                    })
+                }
+
+                return this.response.status(200).send({
+                    success: true,
+                    travel
+                })
+
+            } catch (error) {
+                return this.sendResponseError({
+                    error: new ErrorHandler({
+                        message: error.message,
+                        statusCode: error.statusCode
+                    })
+                })
+            }
+        }
+        // DONE
     async find() {
-        try {
-            // TODO: find travels by arrival_city and deaparture_city and deaparture_date
-            const {
-                arrival_city,
-                departure_city,
-                departure_date
-            } = this.getQueries()
+            try {
+                const {
+                    destination_city,
+                    origin_city,
+                    departure_date,
+                    arrival_date
+                } = this.getQueries()
 
-            if (arrival_city || departure_city || validator.isDate(departure_date)) {
-                const travels = await db.travel.findAll({
-                    where: {
-                        [Op.substring]: {
-                            arrival_city,
-                            departure_city,
-                            departure_date
+                if (origin_city || destination_city || validator.isDate(departure_date) || validator.isDate(arrival_date)) {
+                    const whereQuery = {};
+                    if (origin_city) whereQuery.origin_city = {
+                        [Op.like]: `%${origin_city}%`
+                    };
+                    if (destination_city) whereQuery.destination_city = {
+                        [Op.like]: `%${destination_city}%`
+                    };
+                    if (departure_date) whereQuery.departure_date = {
+                        [Op.eq]: `${new Date(departure_date)}`
+                    };
+                    if (arrival_date) whereQuery.arrival_date = {
+                        [Op.eq]: `${new Date(arrival_date)}`
+                    };
+
+                    const travels = await db.travel.findAll({
+                        where: {
+                            ...whereQuery
                         }
+                    })
+
+                    if (!travels?.length) {
+                        return this.response.status(204).send({
+                            success: true,
+                            message: 'No travels yet'
+                        })
                     }
-                })
 
-                return this.response.status(200).send({
-                    success: true,
-                    travels
-                })
-            } else {
-                const travels = await db.travel.findAll();
+                    return this.response.status(200).send({
+                        success: true,
+                        message: 'All travels',
+                        travels
+                    })
+                } else {
+                    const travels = await db.travel.findAll();
 
-                return this.response.status(200).send({
-                    success: true,
-                    travels
+                    if (!travels?.length) {
+                        return this.response.status(204).send({
+                            success: true,
+                            message: 'No travels yet'
+                        })
+                    }
+
+                    return this.response.status(200).send({
+                        success: true,
+                        travels,
+                        message: 'All travels'
+                    })
+                }
+            } catch (error) {
+                return this.sendResponseError({
+                    error: new ErrorHandler({
+                        message: error.message,
+                        statusCode: error.statusCode
+                    })
                 })
             }
-        } catch (error) {
-            return this.sendResponseError({
-                error: new ErrorHandler({
-                    message: error.message,
-                    statusCode: error.statusCode
-                })
-            })
         }
-    }
-    // DONE
+        // DONE
     async update() {
-        try {
-            const {
-                id,
-                departure_date,
-                arrival_date,
-                destination_city,
-                origin_city,
-                price,
-                available_tickets
-            } = this.getBody()
+            try {
+                const {
+                    id,
+                    departure_date,
+                    arrival_date,
+                    destination_city,
+                    origin_city,
+                    price,
+                    available_tickets
+                } = this.getBody()
 
 
-            const travel = await db.travel.findByPk(id);
+                const travel = await db.travel.findByPk(id);
 
-            if (!travel) {
-                throw new ErrorHandler({
-                    message: `This travel with id ${id} doesn't exists.`
+                if (!travel) {
+                    throw new ErrorHandler({
+                        message: `This travel with id ${id} doesn't exists.`
+                    })
+                }
+
+                const updated_travel = await travel.update({
+                    departure_date,
+                    arrival_date,
+                    destination_city,
+                    origin_city,
+                    price,
+                    available_tickets
+                })
+
+                return this.response.status(200).send({
+                    success: true,
+                    message: `Travel id ${id} updated successfully!`,
+                    data: updated_travel
+                })
+            } catch (error) {
+                return this.sendResponseError({
+                    error: new ErrorHandler({
+                        message: error.message,
+                        statusCode: error.statusCode
+                    })
                 })
             }
-
-            const updated_travel = await travel.update({
-                departure_date,
-                arrival_date,
-                destination_city,
-                origin_city,
-                price,
-                available_tickets
-            })
-
-            return this.response.status(200).send({
-                success: true,
-                message: `Travel id ${id} updated successfully!`,
-                data: updated_travel
-            })
-        } catch (error) {
-            return this.sendResponseError({
-                error: new ErrorHandler({
-                    message: error.message,
-                    statusCode: error.statusCode
-                })
-            })
         }
-    }
-    // DONE
+        // DONE
     async delete() {
-        try {
-            const { id } = this.getParams()
+            try {
+                const { id } = this.getParams()
 
-            const travel = await db.travel.findByPk(id)
+                const travel = await db.travel.findByPk(id)
 
-            if (!travel) {
-                throw new ErrorHandler({
-                    message: `This travel with id ${id} doesn't exists.`
+                if (!travel) {
+                    throw new ErrorHandler({
+                        message: `This travel with id ${id} doesn't exists.`
+                    })
+                }
+
+                await travel.destroy();
+
+                return this.response.status(200).send({
+                    success: true,
+                    message: `Travel id ${id} deleted successfully!`,
+                })
+            } catch (error) {
+                return this.sendResponseError({
+                    error: new ErrorHandler({
+                        message: error.message,
+                        statusCode: error.statusCode
+                    })
                 })
             }
-
-            await travel.destroy();
-
-            return this.response.status(200).send({
-                success: true,
-                message: `Travel id ${id} deleted successfully!`,
-            })
-        } catch (error) {
-            return this.sendResponseError({
-                error: new ErrorHandler({
-                    message: error.message,
-                    statusCode: error.statusCode
-                })
-            })
         }
-    }
-    // DONE
+        // DONE
     async create() {
         try {
             const {

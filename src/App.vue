@@ -18,10 +18,9 @@ body {
 }
 
 .wrapper {
-  background-image: url('./assets/background.jpeg'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
-  background-size: cover; /* Ensures the image covers the entire container */
-  background-position: center; /* Centers the image within the container */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-image: url('./assets/background.jpeg'); 
+  background-size: 100%; 
+  background-repeat: no-repeat;
   min-height: 100vh;
 }
 </style>
